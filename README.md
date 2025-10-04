@@ -1,3 +1,5 @@
+# omni-cad-cam-software
+>>>>>>> ef461af91d1944ab3c15ccb9459402f796685f34
 # OmniCAD - Complete CAD/CAM/CAE/PLM Software Suite
 
 ## Overview
@@ -179,3 +181,6 @@ For questions, issues, or contributions, please use the GitHub issue tracker or 
 ---
 
 **Note**: This project represents a significant engineering effort to create a complete CAD/CAM/CAE/PLM system in a web browser. While it demonstrates professional-level functionality, it's designed primarily for educational and demonstration purposes.
+=======
+# omni-cad-cam-software
+>>>>>>> ef461af91d1944ab3c15ccb9459402f796685f34
