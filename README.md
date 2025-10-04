@@ -1,5 +1,4 @@
 # omni-cad-cam-software
->>>>>>> ef461af91d1944ab3c15ccb9459402f796685f34
 # OmniCAD - Complete CAD/CAM/CAE/PLM Software Suite
 
 ## Overview
@@ -176,7 +175,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For questions, issues, or contributions, please use the GitHub issue tracker or contact the development team.
+For questions, issues, or contributions, please use the GitHub issue tracker or contact me 
 
 ---
 
