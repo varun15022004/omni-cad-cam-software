@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project OmniCAD - Complete CAD/CAM/CAE/PLM Suite</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/panels.css">
+    <link rel="stylesheet" href="static/css/viewport.css">
+    <link rel="stylesheet" href="static/css/tree.css">
+    <link rel="stylesheet" href="static/css/layout-fixes.css">
+    
+    <!-- External libraries -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
+</head>
+<body>
+    <div id="app-container">
+        <!-- Loading screen -->
+        <div id="loading-screen">
+            <div class="loading-content">
+                <h1>Project OmniCAD</h1>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+                <div class="loading-text">Initializing comprehensive CAD/CAM/CAE/PLM environment...</div>
+            </div>
+        </div>
+
+        <!-- Main application -->
+        <div id="main-app" style="display: none;">
+            <!-- Header with comprehensive toolbar -->
+            <header id="toolbar">
+                <div class="toolbar-section">
+                    <div class="logo">
+                        <h1>OmniCAD</h1>
+                        <span class="version">v0.1.0</span>
+                    </div>
+                    <div class="mode-tabs">
+                        <button class="tab active" data-mode="model" title="Parametric Modeling">Model</button>
+                        <button class="tab" data-mode="assembly" title="Assembly Design">Assembly</button>
+                        <button class="tab" data-mode="cam" title="Computer-Aided Manufacturing">CAM</button>
+                        <button class="tab" data-mode="simulation" title="Analysis & Simulation">Simulation</button>
+                        <button class="tab" data-mode="rendering" title="Visualization & Rendering">Rendering</button>
+                        <button class="tab" data-mode="plm" title="Product Lifecycle Management">PLM</button>
+                        <button class="tab" data-mode="generative" title="Generative Design">AI/Gen</button>
+                    </div>
+                </div>
+                <div class="toolbar-section">
+                    <div class="file-controls">
+                        <button id="new-project" title="New Project">New</button>
+                        <button id="open-project" title="Open Project">Open</button>
+                        <button id="save-project" title="Save Project">Save</button>
+                        <button id="save-as-project" title="Save As">Save As</button>
+                        <input type="file" id="file-input" accept=".omniproject,.step,.iges,.stl" style="display: none;">
+                    </div>
+                    <div class="edit-controls">
+                        <button id="undo" title="Undo">↶</button>
+                        <button id="redo" title="Redo">↷</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Context-sensitive ribbon -->
+            <nav id="ribbon">
+                <!-- Model mode ribbon -->
+                <div class="ribbon-tab" data-mode="model">
+                    <div class="ribbon-group">
+                        <h4>Sketch</h4>
+                        <button class="ribbon-btn" data-command="new-sketch">New Sketch</button>
+                        <button class="ribbon-btn" data-command="edit-sketch">Edit Sketch</button>
+                        <button class="ribbon-btn" data-command="finish-sketch">Finish Sketch</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Features</h4>
+                        <button class="ribbon-btn" data-command="extrude">Extrude</button>
+                        <button class="ribbon-btn" data-command="revolve">Revolve</button>
+                        <button class="ribbon-btn" data-command="sweep">Sweep</button>
+                        <button class="ribbon-btn" data-command="loft">Loft</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Modify</h4>
+                        <button class="ribbon-btn" data-command="fillet">Fillet</button>
+                        <button class="ribbon-btn" data-command="chamfer">Chamfer</button>
+                        <button class="ribbon-btn" data-command="shell">Shell</button>
+                        <button class="ribbon-btn" data-command="draft">Draft</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Pattern</h4>
+                        <button class="ribbon-btn" data-command="linear-pattern">Linear</button>
+                        <button class="ribbon-btn" data-command="circular-pattern">Circular</button>
+                        <button class="ribbon-btn" data-command="mirror">Mirror</button>
+                    </div>
+                </div>
+
+                <!-- Assembly mode ribbon -->
+                <div class="ribbon-tab" data-mode="assembly" style="display: none;">
+                    <div class="ribbon-group">
+                        <h4>Insert</h4>
+                        <button class="ribbon-btn" data-command="insert-component">Insert Component</button>
+                        <button class="ribbon-btn" data-command="new-component">New Component</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Mates</h4>
+                        <button class="ribbon-btn" data-command="coincident">Coincident</button>
+                        <button class="ribbon-btn" data-command="parallel">Parallel</button>
+                        <button class="ribbon-btn" data-command="perpendicular">Perpendicular</button>
+                        <button class="ribbon-btn" data-command="concentric">Concentric</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Analysis</h4>
+                        <button class="ribbon-btn" data-command="interference">Interference</button>
+                        <button class="ribbon-btn" data-command="clearance">Clearance</button>
+                        <button class="ribbon-btn" data-command="mass-properties">Mass Properties</button>
+                    </div>
+                </div>
+
+                <!-- CAM mode ribbon -->
+                <div class="ribbon-tab" data-mode="cam" style="display: none;">
+                    <div class="ribbon-group">
+                        <h4>Setup</h4>
+                        <button class="ribbon-btn" data-command="new-setup">New Setup</button>
+                        <button class="ribbon-btn" data-command="stock">Stock</button>
+                        <button class="ribbon-btn" data-command="workholding">Workholding</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>2D Operations</h4>
+                        <button class="ribbon-btn" data-command="contour">Contour</button>
+                        <button class="ribbon-btn" data-command="pocket">Pocket</button>
+                        <button class="ribbon-btn" data-command="drilling">Drilling</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>3D Operations</h4>
+                        <button class="ribbon-btn" data-command="adaptive">Adaptive</button>
+                        <button class="ribbon-btn" data-command="parallel">Parallel</button>
+                        <button class="ribbon-btn" data-command="radial">Radial</button>
+                    </div>
+                    <div class="ribbon-group">
+                        <h4>Simulation</h4>
+                        <button class="ribbon-btn" data-command="simulate">Simulate</button>
+                        <button class="ribbon-btn" data-command="post-process">Post Process</button>
+                    </div>
+                </div>
+
+                <!-- Other ribbon tabs... -->
+            </nav>
+
+            <!-- Main content area with resizable panels -->
+            <main id="main-content">
+                <!-- Left panel: Unified Feature Tree -->
+                <aside id="feature-tree-panel" class="panel resizable">
+                    <div class="panel-header">
+                        <h3>OmniTree</h3>
+                        <div class="panel-controls">
+                            <button class="panel-search" title="Search">🔍</button>
+                            <button class="panel-toggle" title="Collapse">−</button>
+                        </div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="tree-toolbar">
+                            <button id="tree-expand-all">Expand All</button>
+                            <button id="tree-collapse-all">Collapse All</button>
+                        </div>
+                        <div id="feature-tree" class="tree-container"></div>
+                    </div>
+                </aside>
+
+                <!-- Center: Multi-viewport system -->
+                <section id="viewport-container" class="panel">
+                    <div class="viewport-header">
+                        <div class="view-controls">
+                            <button id="view-iso" title="Isometric">ISO</button>
+                            <button id="view-front" title="Front">Front</button>
+                            <button id="view-top" title="Top">Top</button>
+                            <button id="view-right" title="Right">Right</button>
+                            <button id="zoom-fit" title="Zoom to Fit">Fit</button>
+                            <button id="zoom-selection" title="Zoom to Selection">Sel</button>
+                        </div>
+                        <div class="viewport-options">
+                            <select id="render-mode">
+                                <option value="shaded">Shaded</option>
+                                <option value="wireframe">Wireframe</option>
+                                <option value="hidden-line">Hidden Line</option>
+                                <option value="realistic">Realistic</option>
+                            </select>
+                            <button id="split-viewport" title="Split Viewport">Split</button>
+                        </div>
+                    </div>
+                    <div id="viewport-grid" class="viewport-grid">
+                        <div id="viewport-main" class="viewport active"></div>
+                        <div id="viewport-secondary" class="viewport" style="display: none;"></div>
+                    </div>
+                    <div class="viewport-overlay">
+                        <div id="status-bar">
+                            <span class="status-mode">Model Mode</span>
+                            <span class="status-selection">Nothing Selected</span>
+                            <span class="status-coordinates">X: 0.00 Y: 0.00 Z: 0.00</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right panel: Universal Properties -->
+                <aside id="property-panel" class="panel resizable">
+                    <div class="panel-header">
+                        <h3>Properties</h3>
+                        <button class="panel-toggle" title="Collapse">−</button>
+                    </div>
+                    <div class="panel-content">
+                        <div id="property-editor" class="property-editor"></div>
+                    </div>
+                </aside>
+            </main>
+
+            <!-- Bottom panel: Console/Output/Analytics -->
+            <footer id="console-panel" class="panel resizable">
+                <div class="panel-header">
+                    <h3>Console</h3>
+                    <div class="console-tabs">
+                        <button class="console-tab active" data-tab="output">Output</button>
+                        <button class="console-tab" data-tab="gcode">G-Code</button>
+                        <button class="console-tab" data-tab="analysis">Analysis</button>
+                        <button class="console-tab" data-tab="performance">Performance</button>
+                    </div>
+                    <button class="panel-toggle" title="Collapse">−</button>
+                </div>
+                <div class="panel-content">
+                    <div id="console-output" class="console-content"></div>
+                    <div id="console-gcode" class="console-content" style="display: none;"></div>
+                    <div id="console-analysis" class="console-content" style="display: none;"></div>
+                    <div id="console-performance" class="console-content" style="display: none;"></div>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Modal dialogs -->
+        <div id="modal-overlay" class="modal-overlay" style="display: none;">
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Application scripts -->
+    <script src="static/js/pyodide_loader.js"></script>
+    <script type="module" src="static/js/main.js"></script>
+</body>
+</html>

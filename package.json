@@ -1,0 +1,47 @@
+{
+  "name": "project-omnicad",
+  "version": "0.1.0",
+  "description": "Comprehensive client-side CAD/CAM/CAE/PLM web application",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "python scripts/build.py",
+    "test": "python -m pytest tests/",
+    "format": "black src/ tests/",
+    "lint": "flake8 src/ tests/"
+  },
+  "dependencies": {
+    "three": "^0.158.0",
+    "dat.gui": "^0.7.9",
+    "@babylonjs/core": "^6.0.0",
+    "@babylonjs/loaders": "^6.0.0",
+    "opencascade.js": "^2.0.0"
+  },
+  "devDependencies": {
+    "pyodide": "^0.24.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "keywords": [
+    "cad",
+    "cam",
+    "cae",
+    "plm",
+    "webassembly",
+    "python",
+    "engineering",
+    "manufacturing",
+    "simulation",
+    "3d-modeling"
+  ],
+  "author": "Project OmniCAD Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omnicad/project-omnicad.git"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "python": ">=3.9.0"
+  }
+}

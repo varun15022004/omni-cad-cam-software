@@ -1,0 +1,506 @@
+/* Feature tree styles for OmniCAD */
+
+/* Tree container */
+.tree-container {
+    padding: 0;
+    overflow-y: auto;
+    height: 100%;
+    background: var(--background-primary);
+}
+
+/* Tree toolbar */
+.tree-toolbar {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tree-toolbar button {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-primary);
+}
+
+.tree-toolbar button:hover {
+    background: var(--background-tertiary);
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Tree nodes */
+.tree-node {
+    margin: 0;
+    user-select: none;
+    position: relative;
+}
+
+.tree-node-header {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0.375rem;
+    cursor: pointer;
+    border-radius: 3px;
+    margin: 1px 0;
+    transition: all var(--transition-fast);
+    position: relative;
+    gap: 0.25rem;
+}
+
+.tree-node-header:hover {
+    background: var(--background-secondary);
+    transform: translateX(2px);
+}
+
+.tree-node.selected .tree-node-header {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.tree-node.selected .tree-node-header:hover {
+    background: var(--primary-dark);
+    transform: translateX(0);
+}
+
+/* Tree expand icon */
+.tree-expand-icon {
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.tree-expand-icon:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    transform: scale(1.2);
+}
+
+.tree-expand-icon.expanded {
+    transform: rotate(90deg);
+}
+
+.tree-node.selected .tree-expand-icon {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tree-node.selected .tree-expand-icon:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tree node icon */
+.tree-node-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Tree node text */
+.tree-node-text {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* Tree node children */
+.tree-node-children {
+    margin-left: 14px;
+    border-left: 1px solid var(--border-color);
+    position: relative;
+    padding-left: 6px;
+}
+
+.tree-node-children::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--border-color), transparent);
+}
+
+/* Nested level styling */
+.tree-node-children .tree-node-children {
+    margin-left: 12px;
+    padding-left: 6px;
+}
+
+.tree-node-children .tree-node-children .tree-node-children {
+    margin-left: 10px;
+    padding-left: 4px;
+}
+
+/* Connection lines */
+.tree-node-header::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.tree-node:first-child .tree-node-header::before {
+    display: none;
+}
+
+.tree-node.root .tree-node-header::before {
+    display: none;
+}
+
+/* Tree node states */
+.tree-node.disabled .tree-node-header {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tree-node.disabled .tree-node-header:hover {
+    background: none;
+    transform: none;
+}
+
+.tree-node.error .tree-node-header {
+    background: #fee;
+    color: #c44;
+    border: 1px solid #fcc;
+}
+
+.tree-node.warning .tree-node-header {
+    background: #fff8e1;
+    color: #e65100;
+    border: 1px solid #ffcc02;
+}
+
+.tree-node.suppressed .tree-node-header {
+    opacity: 0.4;
+    text-decoration: line-through;
+}
+
+.tree-node.highlighted .tree-node-header {
+    background: var(--accent-color);
+    color: white;
+    animation: tree-highlight 0.5s ease-in-out;
+}
+
+/* Tree node badges */
+.tree-node-badge {
+    background: var(--accent-color);
+    color: white;
+    border-radius: 8px;
+    padding: 0 0.25rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.tree-node-badge.error {
+    background: #ef4444;
+}
+
+.tree-node-badge.warning {
+    background: #f59e0b;
+}
+
+.tree-node-badge.info {
+    background: #3b82f6;
+}
+
+/* Tree node context menu */
+.tree-node-menu {
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+.tree-node-header:hover .tree-node-menu {
+    display: flex;
+}
+
+.tree-node-menu:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+}
+
+.tree-node.selected .tree-node-menu {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tree-node.selected .tree-node-menu:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Tree search functionality */
+.tree-search {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--background-secondary);
+}
+
+.tree-search input {
+    width: 100%;
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
+
+.tree-search input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.tree-search input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Tree node search highlighting */
+.tree-node.search-match .tree-node-text {
+    background: #ffeb3b;
+    color: #000;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+}
+
+.tree-node.search-match.selected .tree-node-text {
+    background: #fff176;
+    color: #000;
+}
+
+/* Tree drag and drop */
+.tree-node.drag-over {
+    border: 2px dashed var(--primary-color);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.tree-node.dragging {
+    opacity: 0.5;
+    transform: rotate(3deg);
+}
+
+.tree-drop-indicator {
+    height: 2px;
+    background: var(--primary-color);
+    margin: 1px 0;
+    border-radius: 1px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.tree-drop-indicator.active {
+    opacity: 1;
+}
+
+/* Tree loading state */
+.tree-node.loading .tree-expand-icon {
+    animation: tree-loading 1s infinite linear;
+}
+
+.tree-node.loading .tree-expand-icon::before {
+    content: '⟳';
+}
+
+/* Tree animations */
+.tree-node-children.expanding {
+    animation: tree-expand 0.2s ease-out;
+}
+
+.tree-node-children.collapsing {
+    animation: tree-collapse 0.2s ease-in;
+}
+
+.tree-node.newly-added {
+    animation: tree-new-node 0.5s ease-out;
+}
+
+/* Tree responsive behavior */
+@media (max-width: 768px) {
+    .tree-node-header {
+        padding: 0.375rem 0.5rem;
+    }
+    
+    .tree-node-text {
+        font-size: 0.85rem;
+    }
+    
+    .tree-node-icon {
+        width: 14px;
+        height: 14px;
+        font-size: 0.7rem;
+    }
+    
+    .tree-expand-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .tree-node-children {
+        margin-left: 12px;
+        padding-left: 6px;
+    }
+}
+
+/* Tree keyframes */
+@keyframes tree-highlight {
+    0% { background: var(--accent-color); }
+    50% { background: #fff176; }
+    100% { background: var(--accent-color); }
+}
+
+@keyframes tree-loading {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes tree-expand {
+    from {
+        max-height: 0;
+        opacity: 0;
+    }
+    to {
+        max-height: 500px;
+        opacity: 1;
+    }
+}
+
+@keyframes tree-collapse {
+    from {
+        max-height: 500px;
+        opacity: 1;
+    }
+    to {
+        max-height: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes tree-new-node {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Custom scrollbar for tree */
+.tree-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tree-container::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+}
+
+.tree-container::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.tree-container::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+/* Tree print styles */
+@media print {
+    .tree-toolbar,
+    .tree-search,
+    .tree-node-menu {
+        display: none;
+    }
+    
+    .tree-node-header {
+        padding: 0.125rem 0.25rem;
+        break-inside: avoid;
+    }
+    
+    .tree-node-children {
+        border-left-color: #000;
+    }
+    
+    .tree-node.selected .tree-node-header {
+        background: #f0f0f0;
+        color: #000;
+    }
+}
+
+/* Tree accessibility */
+.tree-node[role="treeitem"][aria-selected="true"] .tree-node-header {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
+}
+
+.tree-node[role="treeitem"]:focus .tree-node-header {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .tree-node.error .tree-node-header {
+        background: #450a0a;
+        color: #fca5a5;
+        border-color: #7f1d1d;
+    }
+    
+    .tree-node.warning .tree-node-header {
+        background: #451a03;
+        color: #fed7aa;
+        border-color: #92400e;
+    }
+    
+    .tree-node.search-match .tree-node-text {
+        background: #fbbf24;
+        color: #000;
+    }
+}

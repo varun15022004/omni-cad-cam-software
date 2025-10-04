@@ -1,0 +1,425 @@
+/* Panel-specific styles for OmniCAD */
+
+/* Panel base styles */
+.panel {
+    position: relative;
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.panel-header {
+    background: linear-gradient(180deg, var(--background-secondary) 0%, var(--background-tertiary) 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 40px;
+    user-select: none;
+    position: relative;
+}
+
+.panel-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.panel-controls {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.panel-toggle,
+.panel-search,
+.panel-menu {
+    background: transparent;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    font-size: 0.75rem;
+}
+
+.panel-toggle:hover,
+.panel-search:hover,
+.panel-menu:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.panel-toggle:active,
+.panel-search:active,
+.panel-menu:active {
+    transform: scale(0.95);
+}
+
+.panel-content {
+    flex: 1;
+    overflow: auto;
+    background: var(--background-primary);
+    position: relative;
+}
+
+/* Resizable panels */
+.panel.resizable {
+    resize: horizontal;
+    overflow: hidden;
+    min-width: 150px;
+    max-width: 50vw;
+}
+
+.panel.resizable.vertical {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 50vh;
+}
+
+/* Panel resize handle */
+.panel.resizable::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    cursor: ew-resize;
+    z-index: 10;
+}
+
+.panel.resizable.vertical::after {
+    top: -2px;
+    right: 0;
+    width: 100%;
+    height: 4px;
+    cursor: ns-resize;
+}
+
+.panel.resizable::after:hover {
+    background: var(--primary-color);
+    opacity: 0.3;
+}
+
+/* Collapsed panel state */
+.panel.collapsed .panel-content {
+    display: none;
+}
+
+.panel.collapsed {
+    min-width: auto;
+    width: auto;
+}
+
+.panel.collapsed .panel-header {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    width: 40px;
+    height: auto;
+}
+
+/* Panel animations */
+.panel-content {
+    transition: all var(--transition-normal);
+}
+
+.panel.collapsing .panel-content {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+/* Docked panels */
+.panel-dock {
+    display: flex;
+    position: relative;
+}
+
+.panel-dock.horizontal {
+    flex-direction: row;
+}
+
+.panel-dock.vertical {
+    flex-direction: column;
+}
+
+.panel-dock .panel {
+    border-radius: 0;
+}
+
+.panel-dock .panel:not(:last-child) {
+    border-right: 1px solid var(--border-color);
+}
+
+.panel-dock.vertical .panel:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Panel tabs (for tabbed interfaces) */
+.panel-tabs {
+    display: flex;
+    background: var(--background-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow-x: auto;
+}
+
+.panel-tab {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.panel-tab:hover {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+}
+
+.panel-tab.active {
+    background: var(--background-primary);
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.panel-tab.active::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--background-primary);
+}
+
+/* Panel content areas for tabs */
+.panel-tab-content {
+    display: none;
+    flex: 1;
+    overflow: auto;
+}
+
+.panel-tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Panel loading state */
+.panel.loading .panel-content {
+    position: relative;
+    pointer-events: none;
+}
+
+.panel.loading .panel-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel.loading .panel-content::after {
+    content: 'Loading...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Panel error state */
+.panel.error .panel-header {
+    background: #fee;
+    border-bottom-color: #fcc;
+}
+
+.panel.error .panel-header h3 {
+    color: #c44;
+}
+
+/* Panel focus state */
+.panel:focus-within,
+.panel.focused {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+/* Panel overflow handling */
+.panel-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.panel-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+.panel-content::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Panel responsive behavior */
+@media (max-width: 768px) {
+    .panel {
+        min-width: 250px;
+    }
+    
+    .panel.resizable {
+        resize: none;
+    }
+    
+    .panel-header {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .panel-header h3 {
+        font-size: 0.8rem;
+    }
+    
+    .panel-controls {
+        gap: 0.125rem;
+    }
+    
+    .panel-toggle,
+    .panel-search,
+    .panel-menu {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Panel print styles */
+@media print {
+    .panel {
+        break-inside: avoid;
+        border: 1px solid #000;
+        background: white;
+    }
+    
+    .panel-header {
+        background: #f5f5f5;
+        border-bottom: 1px solid #000;
+    }
+    
+    .panel-controls {
+        display: none;
+    }
+}
+
+/* Panel animation keyframes */
+@keyframes panel-slide-in {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes panel-slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes panel-collapse {
+    from {
+        max-height: 1000px;
+        opacity: 1;
+    }
+    to {
+        max-height: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes panel-expand {
+    from {
+        max-height: 0;
+        opacity: 0;
+    }
+    to {
+        max-height: 1000px;
+        opacity: 1;
+    }
+}
+
+/* Panel utility classes */
+.panel.slide-in {
+    animation: panel-slide-in var(--transition-normal) ease-out;
+}
+
+.panel.slide-out {
+    animation: panel-slide-out var(--transition-normal) ease-in;
+}
+
+.panel-content.collapse {
+    animation: panel-collapse var(--transition-normal) ease-in;
+}
+
+.panel-content.expand {
+    animation: panel-expand var(--transition-normal) ease-out;
+}

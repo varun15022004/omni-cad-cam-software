@@ -1,0 +1,535 @@
+/* Viewport and 3D visualization styles for OmniCAD */
+
+/* Viewport container */
+#viewport-container {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--background-secondary);
+    position: relative;
+}
+
+.viewport-header {
+    background: linear-gradient(180deg, var(--background-secondary) 0%, var(--background-tertiary) 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.375rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 36px;
+    box-shadow: var(--shadow-sm);
+    z-index: 10;
+}
+
+/* View controls */
+.view-controls {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+}
+
+.view-controls button {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+    min-width: 32px;
+    height: 22px;
+}
+
+.view-controls button:hover {
+    background: var(--background-tertiary);
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.view-controls button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.view-controls button.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+/* Viewport options */
+.viewport-options {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+}
+
+.viewport-options select {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    min-width: 100px;
+}
+
+.viewport-options select:hover {
+    border-color: var(--border-hover);
+}
+
+.viewport-options select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.viewport-options button {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.viewport-options button:hover {
+    background: var(--background-tertiary);
+    border-color: var(--border-hover);
+}
+
+/* Viewport grid container */
+.viewport-grid {
+    flex: 1;
+    position: relative;
+    background: var(--background-secondary);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 1px;
+    overflow: hidden;
+}
+
+.viewport-grid.split-horizontal {
+    grid-template-columns: 1fr 1fr;
+}
+
+.viewport-grid.split-vertical {
+    grid-template-rows: 1fr 1fr;
+}
+
+.viewport-grid.split-quad {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+/* Individual viewport */
+.viewport {
+    position: relative;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    transition: border-color var(--transition-fast);
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    
+    /* Grid pattern background */
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size: 
+        20px 20px,
+        20px 20px,
+        100px 100px,
+        100px 100px;
+    background-position: 
+        -1px -1px,
+        -1px -1px,
+        -1px -1px,
+        -1px -1px;
+}
+
+.viewport.active {
+    border-color: var(--primary-color);
+    box-shadow: inset 0 0 0 1px var(--primary-color);
+}
+
+.viewport:hover {
+    border-color: var(--border-hover);
+}
+
+/* Viewport canvas */
+.viewport canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+
+.viewport canvas:active {
+    cursor: grabbing;
+}
+
+/* Viewport overlay elements */
+.viewport-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Status bar */
+#status-bar {
+    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.95) 100%);
+    color: var(--text-inverse);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    gap: 1rem;
+}
+
+.status-mode {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.status-selection {
+    color: #90cdf4;
+}
+
+.status-coordinates {
+    color: #86efac;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Viewport tools overlay */
+.viewport-tools {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.viewport-tool {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(4px);
+}
+
+.viewport-tool:hover {
+    background: white;
+    border-color: var(--border-hover);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.viewport-tool.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+/* Viewport navigation cube */
+.viewport-nav-cube {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(4px);
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.viewport-nav-cube:hover {
+    background: white;
+    border-color: var(--border-hover);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+/* Viewport context menu */
+.viewport-context-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: var(--shadow-lg);
+    padding: 0.25rem 0;
+    min-width: 150px;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.viewport-context-menu-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.viewport-context-menu-item:hover {
+    background: var(--background-secondary);
+}
+
+.viewport-context-menu-item.disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.viewport-context-menu-item.disabled:hover {
+    background: none;
+}
+
+.viewport-context-menu-separator {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.25rem 0;
+}
+
+/* Viewport measurements overlay */
+.viewport-measurements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 8;
+}
+
+.viewport-measurement {
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.viewport-measurement::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0,0,0,0.8);
+}
+
+/* Viewport selection highlight */
+.viewport-selection {
+    position: absolute;
+    border: 2px solid var(--primary-color);
+    background: rgba(37, 99, 235, 0.1);
+    pointer-events: none;
+    z-index: 6;
+    border-radius: 2px;
+}
+
+/* Viewport animation for smooth transitions */
+.viewport.transitioning {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Viewport fullscreen mode */
+.viewport.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    border: none;
+    border-radius: 0;
+}
+
+.viewport.fullscreen .viewport-overlay {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+/* Viewport loading state */
+.viewport.loading {
+    position: relative;
+}
+
+.viewport.loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viewport.loading::after {
+    content: 'Loading 3D Scene...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsive viewport behavior */
+@media (max-width: 768px) {
+    .viewport-header {
+        padding: 0.375rem 0.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .view-controls,
+    .viewport-options {
+        gap: 0.25rem;
+    }
+    
+    .view-controls button {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.65rem;
+        min-width: 30px;
+        height: 20px;
+    }
+    
+    .viewport-options select,
+    .viewport-options button {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.65rem;
+    }
+    
+    #status-bar {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.65rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .viewport-nav-cube {
+        width: 60px;
+        height: 60px;
+        font-size: 0.6rem;
+    }
+    
+    .viewport-tools {
+        top: 5px;
+        right: 5px;
+    }
+    
+    .viewport-tool {
+        padding: 0.375rem;
+    }
+    
+    .viewport-grid.split-horizontal,
+    .viewport-grid.split-quad {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+/* Print styles for viewports */
+@media print {
+    .viewport-header,
+    .viewport-overlay,
+    .viewport-tools,
+    .viewport-nav-cube {
+        display: none;
+    }
+    
+    .viewport {
+        border: 1px solid #000;
+        background: white;
+    }
+    
+    .viewport canvas {
+        max-height: 70vh;
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .viewport {
+        background: #1a1a1a;
+        background-image: 
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    }
+    
+    .viewport-tool,
+    .viewport-nav-cube {
+        background: rgba(30, 30, 30, 0.95);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+    }
+    
+    .viewport-tool:hover,
+    .viewport-nav-cube:hover {
+        background: rgba(40, 40, 40, 0.95);
+    }
+    
+    .viewport-context-menu {
+        background: var(--background-primary);
+        border-color: var(--border-color);
+    }
+}
