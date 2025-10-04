@@ -173,6 +173,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - ✅ Advanced manufacturing preparation
 - ✅ Professional user interface
 
+- <img width="1278" height="597" alt="image" src="https://github.com/user-attachments/assets/f8a55ba6-af27-4a34-9296-ab91fc2aa48a" />
+
+
 ## Support
 
 For questions, issues, or contributions, please use the GitHub issue tracker or contact me 
